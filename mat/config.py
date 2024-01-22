@@ -160,32 +160,32 @@ def get_config():
     parser.add_argument("--algorithm_name", type=str,
                         default='mat', choices=["mat", "mat_dec", "mat_encoder", "mat_decoder", "mat_gru"])
 
-    parser.add_argument("--experiment_name", type=str, default="check", help="an identifier to distinguish different experiment.")
+    parser.add_argument("--experiment_name", type=str, default="single", help="an identifier to distinguish different experiment.")
     parser.add_argument("--seed", type=int, default=1, help="Random seed for numpy/torch")
     parser.add_argument("--cuda", action='store_false', default=True, help="by default True, will use GPU to train; or else will use CPU;")
     parser.add_argument("--cuda_deterministic",
                         action='store_false', default=True, help="by default, make sure random seed effective. if set, bypass such function.")
     parser.add_argument("--n_training_threads", type=int,
                         default=1, help="Number of torch threads for training")
-    parser.add_argument("--n_rollout_threads", type=int, default=32,
+    parser.add_argument("--n_rollout_threads", type=int, default=128,
                         help="Number of parallel envs for training rollouts")
     parser.add_argument("--n_eval_rollout_threads", type=int, default=1,
                         help="Number of parallel envs for evaluating rollouts")
     parser.add_argument("--n_render_rollout_threads", type=int, default=1,
                         help="Number of parallel envs for rendering rollouts")
-    parser.add_argument("--num_env_steps", type=int, default=10e6,
+    parser.add_argument("--num_env_steps", type=int, default=2e6,
                         help='Number of environment steps to train (default: 10e6)')
     parser.add_argument("--user_name", type=str, default='xxx',help="[for wandb usage], to specify user's name for simply collecting training data.")
     parser.add_argument("--use_wandb", action='store_false', default=False, help="[for wandb usage], by default True, will log date to wandb server. or else will use tensorboard to log data.")
 
     # env parameters
-    parser.add_argument("--env_name", type=str, default='StarCraft2', help="specify the name of environment")
+    parser.add_argument("--env_name", type=str, default='MPE', help="specify the name of environment")
     parser.add_argument("--use_obs_instead_of_state", action='store_true',
                         default=False, help="Whether to use global state or concatenated obs")
 
     # replay buffer parameters
     parser.add_argument("--episode_length", type=int,
-                        default=200, help="Max length for any episode")
+                        default=25, help="Max length for any episode")
 
     # network parameters
     parser.add_argument("--share_policy", action='store_false',
@@ -200,8 +200,8 @@ def get_config():
                         help="Dimension of hidden layers for actor/critic networks") 
     parser.add_argument("--layer_N", type=int, default=2,
                         help="Number of layers for actor/critic networks")
-    parser.add_argument("--use_ReLU", action='store_false',
-                        default=True, help="Whether to use ReLU")
+    parser.add_argument("--use_ReLU", action='store_true',
+                        default=False, help="Whether to use ReLU")
     parser.add_argument("--use_popart", action='store_true', default=False, help="by default False, use PopArt to normalize rewards.")
     parser.add_argument("--use_valuenorm", action='store_false', default=True, help="by default True, use running mean and std to normalize rewards.")
     parser.add_argument("--use_feature_normalization", action='store_false',
@@ -221,21 +221,21 @@ def get_config():
                         help="Time length of chunks used to train a recurrent_policy")
 
     # optimizer parameters
-    parser.add_argument("--lr", type=float, default=5e-4,
-                        help='learning rate (default: 5e-4)')
-    parser.add_argument("--critic_lr", type=float, default=5e-4,
-                        help='critic learning rate (default: 5e-4)')
+    parser.add_argument("--lr", type=float, default=7e-4,
+                        help='learning rate (default: 7e-4)')
+    parser.add_argument("--critic_lr", type=float, default=7e-4,
+                        help='critic learning rate (default: 7e-4)')
     parser.add_argument("--opti_eps", type=float, default=1e-5,
                         help='RMSprop optimizer epsilon (default: 1e-5)')
     parser.add_argument("--weight_decay", type=float, default=0)
 
     # ppo parameters
-    parser.add_argument("--ppo_epoch", type=int, default=15,
-                        help='number of ppo epochs (default: 15)')
+    parser.add_argument("--ppo_epoch", type=int, default=10,
+                        help='number of ppo epochs (default: 10)')
     parser.add_argument("--use_clipped_value_loss",
                         action='store_false', default=True, help="by default, clip loss value. If set, do not clip loss value.")
-    parser.add_argument("--clip_param", type=float, default=0.2,
-                        help='ppo clip parameter (default: 0.2)')
+    parser.add_argument("--clip_param", type=float, default=0.05,
+                        help='ppo clip parameter (default: 0.05)')
     parser.add_argument("--num_mini_batch", type=int, default=1,
                         help='number of batches for ppo (default: 1)')
     parser.add_argument("--entropy_coef", type=float, default=0.01,
@@ -271,7 +271,7 @@ def get_config():
     parser.add_argument("--log_interval", type=int, default=5, help="time duration between contiunous twice log printing.")
 
     # eval parameters
-    parser.add_argument("--use_eval", action='store_true', default=False, help="by default, do not start evaluation. If set`, start evaluation alongside with training.")
+    parser.add_argument("--use_eval", action='store_false', default=True, help="by default, do not start evaluation. If set`, start evaluation alongside with training.")
     parser.add_argument("--eval_interval", type=int, default=25, help="time duration between contiunous twice evaluation progress.")
     parser.add_argument("--eval_episodes", type=int, default=32, help="number of episodes of a single evaluation.")
 
